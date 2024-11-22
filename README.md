@@ -26,5 +26,8 @@ You can preview the production build with `npm run preview`.
 # Packages
 npm i tailwindcss
 npm i @observablehq/plot
-npm i sqlite3
-npm i -D @types/sqlite3
+npm i better-sqlite3
+npm i -D @types/better-sqlite3
+npm i -D @types/node
+
+rm db.sqlite; sqlite3 db.sqlite < init.sql 
