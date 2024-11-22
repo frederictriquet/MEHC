@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.nicebutton {
+  @apply inline-flex;
+  @apply justify-between;
+  @apply items-center;
+  @apply p-5;
+  @apply text-gray-500;
+  @apply bg-white;
+  @apply rounded-lg;
+  @apply border;
+  @apply border-gray-200;
+  @apply cursor-pointer;
+  @apply dark:hover:text-gray-300;
+  @apply dark:border-gray-700;
+  @apply dark:peer-checked:text-blue-500;
+  @apply peer-checked:border-blue-600;
+  @apply peer-checked:text-blue-600;
+  @apply hover:text-gray-600;
+  @apply hover:bg-gray-100;
+  /* @apply dark:text-gray-400;
+  @apply dark:bg-gray-800;
+  @apply dark:hover:bg-gray-700; */
+}
+
+.nicebutton:enabled {
+  @apply text-green-700;
+}
+
+.nicebutton:disabled {
+  @apply text-red-700;
+}
+
+h1 {
+  @apply mb-5;
+  @apply text-3xl;
+  @apply font-medium;
+  @apply text-gray-900;
+}
