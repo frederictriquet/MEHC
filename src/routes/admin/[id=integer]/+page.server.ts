@@ -1,20 +1,20 @@
 import type { PageServerLoad } from './$types';
-import { getSuspect, updateSuspectPicture } from '$lib/supabaseClient';
+import { getSuspect, updateSuspectPicture } from '$lib/sqliteClient';
 
-export const load = (async ({ params }) => {
-	const id = parseInt(params.id);
-	const suspect = await getSuspect(id);
+export const load = (async (event) => {
+	const id = parseInt(event.params.id);
+	const suspect = await getSuspect(event, id);
 	// console.log(suspect);
 	return { suspect }; //{ url: url };
 }) satisfies PageServerLoad;
 
 /** @type {import('./$types').Actions} */
 export const actions = {
-	uploadPicture: async ({ params, request }) => {
-		const id = parseInt(params.id);
-		const data = await request.formData();
+	uploadPicture: async (event) => {
+		const id = parseInt(event.params.id);
+		const data = await event.request.formData();
 		const pictureData = data.get('pictureData');
-		await updateSuspectPicture(id, pictureData);
+		await updateSuspectPicture(event, id, pictureData);
 		return { success: true };
 	}
 };
