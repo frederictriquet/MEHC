@@ -1,6 +1,6 @@
 import { getStatus, getSuspects, voteForSuspect } from '$lib/sqliteClient';
 import { redirect, type ServerLoadEvent } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load = (async (event) => {
 	const status = await getStatus(event);
@@ -20,9 +20,8 @@ export const load = (async (event) => {
 	return { status: status, suspects: suspects };
 }) satisfies PageServerLoad;
 
-/** @type {import('./$types').Actions} */
 export const actions = {
-	vote: async (event: ServerLoadEvent) => {
+	vote: async (event) => {
 		const status = await getStatus(event);
 		if (status === 1) {
 			const data = await event.request.formData();
@@ -40,4 +39,4 @@ export const actions = {
 		throw redirect(303, '/results');
 		// return { success: true };
 	}
-};
+} satisfies Actions;

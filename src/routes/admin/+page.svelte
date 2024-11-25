@@ -46,7 +46,8 @@
                 >
                     <td
                         class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                        ><form method="POST" action="?/updateSuspectName">
+                        >
+                        <span>{suspect.real_name}</span><form method="POST" action="?/updateSuspectName">
                             <input type="hidden" name="id" value={suspect.id} />
                             <input
                                 type="text"

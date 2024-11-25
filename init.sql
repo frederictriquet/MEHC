@@ -5,6 +5,7 @@ INSERT INTO meta(key, value_int) VALUES('status', 1)
 
 CREATE TABLE suspects (
     -- id INT PRIMARY KEY,
+    real_name TEXT NOT NULL,
     name TEXT NOT NULL,
     is_playing INT DEFAULT 1,
     votes INT DEFAULT 0,

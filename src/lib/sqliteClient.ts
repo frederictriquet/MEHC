@@ -12,7 +12,7 @@ export async function updateStatus(event, newStatus: number) {
 
 export async function getSuspects(event, all: boolean) {
     let res;
-    const query = "select rowid as id, * from suspects" + (all ? "" : " where is_playing=1");
+    const query = "select rowid as id, * from suspects" + (all ? " order by is_playing desc, real_name asc" : " where is_playing=1 order by name");
     res = event.locals.db.prepare(query).all();
     return res;
 }
