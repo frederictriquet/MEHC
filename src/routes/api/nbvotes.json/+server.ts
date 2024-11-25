@@ -1,9 +1,9 @@
-import { getSuspects } from "$lib/supabaseClient";
+import { getSuspects } from "$lib/sqliteClient";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 
-export const GET: RequestHandler = async () => {
-	const suspects = await getSuspects();
+export const GET: RequestHandler = async (event) => {
+	const suspects = await getSuspects(event, false);
 	const nbVotes = suspects?.map((e) => e.votes).reduce((previous, current) => previous + current);
 
   return json({nbVotes: nbVotes});
