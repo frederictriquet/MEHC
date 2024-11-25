@@ -30,5 +30,5 @@ npm i better-sqlite3
 npm i -D @types/better-sqlite3
 npm i -D @types/node
 npm i -D autoprefixer
-
+npm i -D @sveltejs/adapter-node
 rm db.sqlite; sqlite3 db.sqlite < init.sql 
