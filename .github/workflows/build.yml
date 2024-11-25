@@ -16,3 +16,10 @@ jobs:
         # registry: ${{ env.REGISTRY }}
         username: ${{ secrets.DOCKER_USER }}
         password: ${{ secrets.DOCKER_TOKEN }}
+    - run: ./init-db.sh
+    - run: docker build -t rodgeradr/mehc .
+    - run: docker push rodgeradr/mehc
+    # - name: Build web app
+    #   uses: actions/setup-node@v4
+    #   with:
+    #     node-version: 20.x
