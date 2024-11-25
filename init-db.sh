@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-rm db.sqlite; sqlite3 db.sqlite < init.sql 
+rm -f db.sqlite; sqlite3 db.sqlite < init.sql 
 
 for f in images/*.jpg
 do
