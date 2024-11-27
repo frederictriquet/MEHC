@@ -38,7 +38,7 @@
                 <th>Votes</th>
                 <th></th>
                 <th></th>
-                <th></th>
+                <!-- <th></th> -->
             </tr>
             {#each data.suspects as suspect}
                 <tr
@@ -74,7 +74,7 @@
                             >
                         </form>
                     </td>
-                    <td
+                    <!-- <td
                         ><form method="POST" action="?/deleteSuspect">
                             <input
                                 type="hidden"
@@ -82,7 +82,7 @@
                                 value={suspect.id}
                             /><button>delete</button>
                         </form></td
-                    >
+                    > -->
                 </tr>
             {/each}
         </thead>
