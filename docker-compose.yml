@@ -1,4 +1,3 @@
-version: '3'
 
 services:
   https-portal:
@@ -8,13 +7,15 @@ services:
       - '443:443'
     environment:
       DOMAINS: 'impro.dynv6.net -> http://mehc:3000'
-      # STAGE: 'production' # Don't use production until staging works
-      STAGE: local
+      STAGE: 'production' # Don't use production until staging works
+      # STAGE: local
     volumes:
       - https-portal-data:/var/lib/https-portal
 
   mehc:
     image: rodgeradr/mehc
+    ports:
+      - '3000:3000'
 
 volumes:
     https-portal-data: # Recommended, to avoid re-signing when upgrading HTTPS-PORTAL
