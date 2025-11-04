@@ -58,15 +58,17 @@ This file tracks improvements to be made to the MEHC codebase.
 
 ## Priority 3 - Code Quality
 
-- [ ] **Remove unnecessary async keywords**
+- [x] **Remove unnecessary async keywords**
   - File: `src/lib/sqliteClient.ts` (all functions)
   - Issue: Functions marked `async` but use synchronous API
   - Fix: Remove `async` keywords and `await` calls
+  - ✅ COMPLETED: Removed all async/await from sqliteClient and all calling code
 
-- [ ] **Extract vote counting to helper function**
+- [x] **Extract vote counting to helper function**
   - Files: `src/routes/results/+page.server.ts:11`, `src/routes/api/nbvotes.json/+server.ts:7`
   - Issue: Duplicate code
   - Fix: Create helper function in sqliteClient
+  - ✅ COMPLETED: Created getTotalVotes() helper function, updated all usages
 
 - [ ] **Remove commented/debug code**
   - `src/lib/sqliteClient.ts:36` - console.log
@@ -74,10 +76,11 @@ This file tracks improvements to be made to the MEHC codebase.
   - `src/routes/admin/+page.svelte:77-85` - commented delete button
   - `src/routes/api/status.json/+server.ts:1` - commented import
 
-- [ ] **Standardize type annotations**
+- [x] **Standardize type annotations**
   - Files: All `+page.server.ts` files
   - Issue: Mix of JSDoc and TypeScript syntax
   - Fix: Use consistent TypeScript syntax throughout
+  - ✅ COMPLETED: Replaced JSDoc with TypeScript types (PageServerLoad, Actions) across all server files
 
 ## Priority 4 - Performance Optimizations
 

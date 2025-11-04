@@ -1,6 +1,6 @@
 
 
-export async function getStatus(event) {
+export function getStatus(event) {
     try {
         const res = event.locals.db.prepare("select value_int from meta where key='status'").get();
         return res?.value_int ?? 0;
@@ -11,7 +11,7 @@ export async function getStatus(event) {
 }
 
 
-export async function updateStatus(event, newStatus: number) {
+export function updateStatus(event, newStatus: number) {
     try {
         event.locals.db.prepare("update meta set value_int = ? where key='status'").run(newStatus);
     } catch (error) {
@@ -20,7 +20,7 @@ export async function updateStatus(event, newStatus: number) {
     }
 }
 
-export async function getSuspects(event, all: boolean) {
+export function getSuspects(event, all: boolean) {
     try {
         const query = "select rowid as id, * from suspects" + (all ? " order by is_playing desc, real_name asc" : " where is_playing=1 order by name");
         const res = event.locals.db.prepare(query).all();
@@ -31,7 +31,7 @@ export async function getSuspects(event, all: boolean) {
     }
 }
 
-export async function getSuspect(event, id: number) {
+export function getSuspect(event, id: number) {
     try {
         return event.locals.db.prepare("select rowid as id, * from suspects where rowid=?").get(id);
     } catch (error) {
@@ -40,7 +40,7 @@ export async function getSuspect(event, id: number) {
     }
 }
 
-export async function updateSuspectName(event, id: number, name: string) {
+export function updateSuspectName(event, id: number, name: string) {
     try {
         event.locals.db.prepare("update suspects set name = ? where rowid=?").run(name, id);
     } catch (error) {
@@ -49,7 +49,7 @@ export async function updateSuspectName(event, id: number, name: string) {
     }
 }
 
-export async function switchSuspectIsPlaying(event, id: number) {
+export function switchSuspectIsPlaying(event, id: number) {
     try {
         event.locals.db.prepare("update suspects set is_playing = not is_playing where rowid=?").run(id);
     } catch (error) {
@@ -58,7 +58,7 @@ export async function switchSuspectIsPlaying(event, id: number) {
     }
 }
 
-export async function updateSuspectPicture(event, id: number, pictureData: string) {
+export function updateSuspectPicture(event, id: number, pictureData: string) {
     try {
         event.locals.db.prepare("update suspects set picture_data = ? where rowid=?").run(pictureData, id);
     } catch (error) {
@@ -67,7 +67,7 @@ export async function updateSuspectPicture(event, id: number, pictureData: strin
     }
 }
 
-export async function deleteSuspect(event, id: number) {
+export function deleteSuspect(event, id: number) {
     try {
         event.locals.db.prepare("delete from suspects where rowid=?").run(id);
     } catch (error) {
@@ -76,7 +76,7 @@ export async function deleteSuspect(event, id: number) {
     }
 }
 
-export async function createSuspect(event, name: string) {
+export function createSuspect(event, name: string) {
     try {
         event.locals.db.prepare("insert into suspects(real_name, name) values(?, ?)").run(name, name);
     } catch (error) {
@@ -85,7 +85,7 @@ export async function createSuspect(event, name: string) {
     }
 }
 
-export async function voteForSuspect(event, id: number) {
+export function voteForSuspect(event, id: number) {
     try {
         // Use transaction to ensure atomic vote counting
         const transaction = event.locals.db.transaction(() => {
@@ -98,11 +98,21 @@ export async function voteForSuspect(event, id: number) {
     }
 }
 
-export async function resetVotesForSuspects(event) {
+export function resetVotesForSuspects(event) {
     try {
         event.locals.db.prepare("update suspects set votes = 0").run();
     } catch (error) {
         console.error('Error resetting votes:', error);
         throw new Error('Failed to reset votes');
+    }
+}
+
+export function getTotalVotes(event) {
+    try {
+        const suspects = getSuspects(event, false);
+        return suspects.map((e) => e.votes).reduce((previous, current) => previous + current, 0);
+    } catch (error) {
+        console.error('Error calculating total votes:', error);
+        return 0;
     }
 }

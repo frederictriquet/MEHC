@@ -2,8 +2,8 @@ import { getStatus, getSuspects, voteForSuspect } from '$lib/sqliteClient';
 import { redirect, type ServerLoadEvent } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
-export const load = (async (event) => {
-	const status = await getStatus(event);
+export const load: PageServerLoad = (event) => {
+	const status = getStatus(event);
 	switch (status) {
 		case 0:
 			event.cookies.delete('has-voted', { path: "/" });
@@ -16,13 +16,13 @@ export const load = (async (event) => {
 	if (event.cookies.get('has-voted')) {
 		throw redirect(303, '/results');
 	}
-	const suspects = await getSuspects(event, false);
-	return { status: status, suspects: suspects };
-}) satisfies PageServerLoad;
+	const suspects = getSuspects(event, false);
+	return { status, suspects };
+};
 
-export const actions = {
+export const actions: Actions = {
 	vote: async (event) => {
-		const status = await getStatus(event);
+		const status = getStatus(event);
 
 		// Only allow voting if status is 1
 		if (status !== 1) {
@@ -42,7 +42,7 @@ export const actions = {
 		}
 
 		try {
-			await voteForSuspect(event, suspectId);
+			voteForSuspect(event, suspectId);
 		} catch (error) {
 			console.error('Vote failed:', error);
 			// Still set cookie to prevent retry
@@ -58,4 +58,4 @@ export const actions = {
 
 		throw redirect(303, '/results');
 	}
-} satisfies Actions;
+};

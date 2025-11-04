@@ -10,13 +10,12 @@ import {
 } from '$lib/sqliteClient';
 import type { PageServerLoad } from './$types';
 
-export const load = (async (event) => {
-    const status = await getStatus(event);
-    const suspects = await getSuspects(event, true);
-    return { status: status, suspects: suspects };
-}) satisfies PageServerLoad;
+export const load: PageServerLoad = (event) => {
+    const status = getStatus(event);
+    const suspects = getSuspects(event, true);
+    return { status, suspects };
+};
 
-/** @type {import('./$types').Actions} */
 export const actions = {
     updateStatus: async (event) => {
         const data = await event.request.formData();
@@ -32,7 +31,7 @@ export const actions = {
         }
 
         try {
-            await updateStatus(event, status);
+            updateStatus(event, status);
             return { success: true };
         } catch (error) {
             return { success: false, error: 'Failed to update status' };
@@ -57,7 +56,7 @@ export const actions = {
         }
 
         try {
-            await updateSuspectName(event, id, name.trim());
+            updateSuspectName(event, id, name.trim());
             return { success: true };
         } catch (error) {
             return { success: false, error: 'Failed to update suspect name' };
@@ -77,7 +76,7 @@ export const actions = {
         }
 
         try {
-            await switchSuspectIsPlaying(event, id);
+            switchSuspectIsPlaying(event, id);
             return { success: true };
         } catch (error) {
             return { success: false, error: 'Failed to toggle suspect status' };
@@ -97,7 +96,7 @@ export const actions = {
         }
 
         try {
-            await deleteSuspect(event, id);
+            deleteSuspect(event, id);
             return { success: true };
         } catch (error) {
             return { success: false, error: 'Failed to delete suspect' };
@@ -116,7 +115,7 @@ export const actions = {
         }
 
         try {
-            await createSuspect(event, name.trim());
+            createSuspect(event, name.trim());
             return { success: true };
         } catch (error) {
             return { success: false, error: 'Failed to create suspect' };
@@ -124,7 +123,7 @@ export const actions = {
     },
     resetVotes: async (event) => {
         try {
-            await resetVotesForSuspects(event);
+            resetVotesForSuspects(event);
             return { success: true };
         } catch (error) {
             return { success: false, error: 'Failed to reset votes' };
