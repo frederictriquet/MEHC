@@ -8,7 +8,7 @@ export const load = (async (event) => {
 		throw redirect(303, '/');
 	}
 	const suspects = await getSuspects(event, false);
-	const nbVotes = suspects?.map((e) => e.votes).reduce((previous, current) => previous + current);
+	const nbVotes = suspects?.map((e) => e.votes).reduce((previous, current) => previous + current, 0) ?? 0;
 
 	return {
 		status: status,

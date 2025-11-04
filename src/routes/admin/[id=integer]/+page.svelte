@@ -3,8 +3,6 @@
 	import type { PageData } from './$types';
 	import { enhance } from '$app/forms';
 
-	export let data: PageData;
-
 	const width = 320; // We will scale the photo width to this
 	let height = 240; // This will be computed based on the input stream
 
@@ -172,7 +170,10 @@
 </div>
 
 <div class="camera">
-	<video id="video" bind:this={video}>Video stream not available.</video>
+	<video id="video" bind:this={video}>
+		<track kind="captions" />
+		Video stream not available.
+	</video>
 </div>
 <div>
 	<button class="bg-green-700 rounded-md text-white p-4" on:click|preventDefault={takepicture}
@@ -180,7 +181,7 @@
 	>
 </div>
 
-<canvas id="canvas" bind:this={canvas} />
+<canvas id="canvas" bind:this={canvas}></canvas>
 
 <div class="output">
 	<img id="photo" bind:this={photo} alt="The screen capture will appear in this box." />

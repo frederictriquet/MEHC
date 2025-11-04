@@ -23,11 +23,31 @@ export const load = (async (event) => {
 export const actions = {
 	vote: async (event) => {
 		const status = await getStatus(event);
-		if (status === 1) {
-			const data = await event.request.formData();
-			const suspectId = String(data.get('selectedSuspect') ?? '0');
-			await voteForSuspect(event, parseInt(suspectId));
+
+		// Only allow voting if status is 1
+		if (status !== 1) {
+			throw redirect(303, '/');
 		}
+
+		const data = await event.request.formData();
+		const suspectIdStr = data.get('selectedSuspect');
+
+		if (!suspectIdStr) {
+			throw redirect(303, '/'); // No suspect selected
+		}
+
+		const suspectId = parseInt(String(suspectIdStr));
+		if (isNaN(suspectId) || suspectId < 1) {
+			throw redirect(303, '/'); // Invalid suspect ID
+		}
+
+		try {
+			await voteForSuspect(event, suspectId);
+		} catch (error) {
+			console.error('Vote failed:', error);
+			// Still set cookie to prevent retry
+		}
+
 		event.cookies.set('has-voted', 'true', {
 			path: '/',
 			httpOnly: true,
@@ -37,6 +57,5 @@ export const actions = {
 		});
 
 		throw redirect(303, '/results');
-		// return { success: true };
 	}
 } satisfies Actions;
