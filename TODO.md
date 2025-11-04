@@ -84,19 +84,21 @@ This file tracks improvements to be made to the MEHC codebase.
 
 ## Priority 4 - Performance Optimizations
 
-- [ ] **Reduce polling frequency or use SSE/WebSockets**
-  - File: `src/routes/results/+page.svelte:35-40`
-  - Issue: Polls nbvotes every 1 second - excessive
-  - Fix: Increase interval or implement server-sent events
+- [x] **Reduce polling frequency or use SSE/WebSockets**
+  - Files: `src/routes/results/+page.svelte`, `src/routes/+page.svelte`
+  - Issue: Polls nbvotes every 1 second and status every 10 seconds - excessive
+  - Fix: Implement server-sent events
+  - ✅ COMPLETED: Created SSE endpoint at `/api/events`, replaced all polling with EventSource in both pages
 
 - [ ] **Add database indexes**
   - File: `init.sql`
   - Issue: No indexes on frequently queried columns
   - Fix: Add index on `is_playing` and `votes` columns
 
-- [ ] **Cache database connection**
+- [x] **Cache database connection**
   - Related to connection leak fix above
   - Implement proper connection reuse
+  - ✅ COMPLETED: Already fixed in Priority 1 - single connection at module level
 
 ## Priority 5 - Nice to Have
 
