@@ -17,7 +17,7 @@ const config = {
             envPreffix: ''
         }),
         csrf: {
-            checkOrigin: false,
+            trustedOrigins: ['*'],
         }
     }
 };

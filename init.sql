@@ -7,7 +7,7 @@ CREATE TABLE suspects (
     -- id INT PRIMARY KEY,
     real_name TEXT NOT NULL,
     name TEXT NOT NULL,
-    is_playing INT DEFAULT 1,
+    is_playing INT DEFAULT 0,
     votes INT DEFAULT 0,
     picture_data TEXT
 );

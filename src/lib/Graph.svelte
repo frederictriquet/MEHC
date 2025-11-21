@@ -29,7 +29,7 @@
 	});
 </script>
 
-<div class="chart" bind:clientWidth={width} bind:clientHeight={height} bind:this={chartEl} />
+<div class="chart" bind:clientWidth={width} bind:clientHeight={height} bind:this={chartEl}></div>
 
 <style type="postcss">
 	.chart {

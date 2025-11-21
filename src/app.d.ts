@@ -1,9 +1,7 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
 // for information about these interfaces
 
-// import type {Database} from 'sqlite3'
-import pkg from 'sqlite3';
-const {Database} = pkg;
+import type { Database } from 'better-sqlite3';
 
 declare global {
 	namespace App {
