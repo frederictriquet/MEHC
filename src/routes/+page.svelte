@@ -1,28 +1,43 @@
 <script lang="ts">
 	import { onDestroy, onMount } from 'svelte';
 	import type { PageData } from './$types';
-	export let data: PageData;
-	let selectedSuspect = -1;
-	let apiInterval;
 
-	$: name = data.suspects?.filter((s) => s.id == selectedSuspect)[0]?.name;
-	$: voteButtonLabel =
-		selectedSuspect == -1 ? "Vous devez d'abord choisir un suspect." : `Je vote pour ${name}.`;
+	let { data }: { data: PageData } = $props();
+	let selectedSuspect = $state(-1);
+	let eventSource: EventSource;
+
+	let name = $derived(data.suspects?.filter((s) => s.id == selectedSuspect)[0]?.name);
+	let voteButtonLabel = $derived(
+		selectedSuspect == -1 ? "Vous devez d'abord choisir un suspect." : `Je vote pour ${name}.`
+	);
 
 	onMount(() => {
-		apiInterval = setInterval(async () => {
-			let statusResponse = await fetch('/api/status.json');
-			const body = await statusResponse.json();
-			// console.log(body.status, data.status);
-			if (body.status != data.status) {
-				// console.log('redirect');
-				window.location.replace('/');
+		// Use Server-Sent Events for real-time status updates
+		eventSource = new EventSource('/api/events');
+
+		eventSource.onmessage = (event) => {
+			try {
+				const eventData = JSON.parse(event.data);
+
+				// If status changed, reload page
+				if (eventData.status !== data.status) {
+					window.location.replace('/');
+				}
+			} catch (error) {
+				console.error('Error parsing SSE data:', error);
 			}
-		}, 10000);
+		};
+
+		eventSource.onerror = (error) => {
+			console.error('SSE connection error:', error);
+			// Auto-reconnect is handled by EventSource
+		};
 	});
 
 	onDestroy(() => {
-		clearInterval(apiInterval);
+		if (eventSource) {
+			eventSource.close();
+		}
 	});
 </script>
 
