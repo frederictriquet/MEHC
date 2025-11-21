@@ -1,9 +1,10 @@
 <script lang="ts">
     import type { PageData } from "./$types";
-    export let data: PageData;
+
+    let { data }: { data: PageData } = $props();
 
     const statuses = ["Pas commencé", "Vote en cours", "Vote terminé"];
-    let selectedStatus = data.status;
+    let selectedStatus = $state(data.status);
 </script>
 
 <form method="POST" action="?/resetVotes">

@@ -1,12 +1,12 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	export let data: PageData;
-
 	import Graph from '$lib/Graph.svelte';
 	import Podium from '$lib/Podium.svelte';
 	import { onDestroy, onMount } from 'svelte';
-	let width = 500;
-	let height = 200;
+
+	let { data }: { data: PageData } = $props();
+	let width = $state(500);
+	let height = $state(200);
 	const texts = [
 		'Le vote est en cours...',
 		'Quel suspense insoutenable !',
@@ -19,30 +19,48 @@
 		"Ça devient vraiment long d'attendre",
 		"Bon... Ils font quoi les autres ?"
 	];
-	let textIndex = 0;
-	$: text = texts[textIndex % texts.length];
-	let nbVotes = data.nbVotes;
-	let apiInterval, refreshNbVotesInterval;
+	let textIndex = $state(0);
+	let text = $derived(texts[textIndex % texts.length]);
+	let nbVotes = $state(data.nbVotes);
+	let textInterval: number;
+	let eventSource: EventSource;
+
 	onMount(() => {
-		apiInterval = setInterval(async () => {
-			let statusResponse = await fetch('/api/status.json');
-			const body = await statusResponse.json();
-			if (body.status != data.status) {
-				window.location.replace('/results');
-			}
+		// Rotate text every 10 seconds
+		textInterval = setInterval(() => {
 			textIndex++;
 		}, 10000);
-		refreshNbVotesInterval = setInterval(async () => {
-			let nbVotesResponse = await fetch('/api/nbvotes.json');
-			const body = await nbVotesResponse.json();
 
-			nbVotes = body.nbVotes;
-		}, 1000);
+		// Use Server-Sent Events for real-time updates
+		eventSource = new EventSource('/api/events');
+
+		eventSource.onmessage = (event) => {
+			try {
+				const eventData = JSON.parse(event.data);
+
+				// Update vote count
+				nbVotes = eventData.nbVotes;
+
+				// If status changed, reload page
+				if (eventData.status !== data.status) {
+					window.location.replace('/results');
+				}
+			} catch (error) {
+				console.error('Error parsing SSE data:', error);
+			}
+		};
+
+		eventSource.onerror = (error) => {
+			console.error('SSE connection error:', error);
+			// Auto-reconnect is handled by EventSource
+		};
 	});
 
 	onDestroy(() => {
-		clearInterval(apiInterval);
-		clearInterval(refreshNbVotesInterval);
+		clearInterval(textInterval);
+		if (eventSource) {
+			eventSource.close();
+		}
 	});
 </script>
 

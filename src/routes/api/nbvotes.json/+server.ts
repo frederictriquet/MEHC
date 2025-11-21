@@ -1,10 +1,8 @@
-import { getSuspects } from "$lib/sqliteClient";
+import { getTotalVotes } from "$lib/sqliteClient";
 import { json, type RequestHandler } from "@sveltejs/kit";
 
 
-export const GET: RequestHandler = async (event) => {
-	const suspects = await getSuspects(event, false);
-	const nbVotes = suspects?.map((e) => e.votes).reduce((previous, current) => previous + current);
-
-  return json({nbVotes: nbVotes});
+export const GET: RequestHandler = (event) => {
+	const nbVotes = getTotalVotes(event);
+  return json({ nbVotes });
 }
