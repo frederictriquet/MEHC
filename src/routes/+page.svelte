@@ -46,6 +46,8 @@
 	<h1 class="text-center">Conservez-la ouverte.</h1>
 	<h1 class="text-center">Vous l'utiliserez plus tard pour voter.</h1>
 	<img alt="Impropulsion" class="mx-auto w-96" src="impropulsion.jpg" />
+	<h1 class="text-center mt-10">Partagez ce qrcode avec vos voisins</h1>
+	<img alt="QR code" class="mx-auto w-64 mt-10" src="qrcode_https.svg" />
 {:else}
 	<h1 class="text-center">Qui est l'assassin ?</h1>
 	<h1 class="text-center">

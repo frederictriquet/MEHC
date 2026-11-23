@@ -20,7 +20,15 @@
 			y: {
 				label: ''
 			},
-			marks: [Plot.barX(points, { x: 'votes', y: 'name', fill: 'gray' }), Plot.ruleY([0])]
+			marks: [
+				Plot.barX(points, {
+					x: 'votes',
+					y: 'name',
+					fill: 'gray',
+					sort: { y: 'x', reverse: true }
+				}),
+				Plot.ruleY([0])
+			]
 		});
 		node.appendChild(chart);
 	};
