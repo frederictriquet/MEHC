@@ -25,7 +25,7 @@
 					x: 'votes',
 					y: 'name',
 					fill: 'gray',
-					sort: { y: 'x', reverse: true }
+					sort: { y: '-x' }
 				}),
 				Plot.ruleY([0])
 			]
